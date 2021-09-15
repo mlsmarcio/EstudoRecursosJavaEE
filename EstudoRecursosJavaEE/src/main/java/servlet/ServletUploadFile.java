@@ -5,14 +5,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import jakarta.servlet.RequestDispatcher;
-import dao.DaoImagem;
+import dao.DaoArquivo;
 import dao.DaoUsuario;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import user.Imagem;
+import user.Arquivo;
 import user.Usuario;
 import jakarta.servlet.ServletException;
 
@@ -21,7 +21,7 @@ public class ServletUploadFile extends HttpServlet {
 	private static final long serialVersionUID = 1L;
       
 	private DaoUsuario daoUsuario = new DaoUsuario();
-	protected DaoImagem daoImagem = new DaoImagem(); 
+	protected DaoArquivo daoArquivo = new DaoArquivo(); 
 	
     public ServletUploadFile() {
         super();
@@ -38,24 +38,24 @@ public class ServletUploadFile extends HttpServlet {
 			String acao = request.getParameter("acao");
 			
 			if (acao.equalsIgnoreCase("carregar")) {
-				request.setAttribute("listaImagens", daoImagem.listar(usuario.getId()));
+				request.setAttribute("listaImagens", daoArquivo.listar(usuario.getId()));
 				dispatcher.forward(request, response);
 				
 			}else if (acao.equalsIgnoreCase("download")) {
 				
-				String idImagem = request.getParameter("idImagem");
+				String idArquivo = request.getParameter("idImagem");
 				
 				
 				
-				if (idImagem != null) {
+				if (idArquivo != null) {
 					
-					Imagem imagem = daoImagem.getImagem(Long.parseLong(idImagem));
+					Arquivo arquivo = daoArquivo.getImagem(Long.parseLong(idArquivo));
 					
 					// DEFINE O CABEÇALHO DA RESPOSTA
-					response.setHeader("Content-Disposition", "attachment;filename=imagem.png");
+					response.setHeader("Content-Disposition", "attachment;filename=imagem." + arquivo.getTipo());
 					
 					// ESCREVER DADOS DA RESPOSTA
-					InputStream is = imagem.gerarImagem();
+					InputStream is = arquivo.gerarImagem();
 					int read = 0;
 					byte[] bytes = new byte[1024];
 					OutputStream os = response.getOutputStream();
@@ -78,13 +78,15 @@ public class ServletUploadFile extends HttpServlet {
 		// imagem em base 64
 		String fileUpload = request.getParameter("fileUpload");
 		
-		HttpSession session = request.getSession();
-		Usuario usuario = (Usuario) session.getAttribute("usuario");
-		usuario.addImagem(new Imagem(0L,fileUpload));
-		daoUsuario.gravarImagem(usuario);
-		
-		System.out.println("Imagem:  " + fileUpload);
-		response.getWriter().write("Processada com sucesso");
+		if (fileUpload != null) {
+			HttpSession session = request.getSession();
+			Usuario usuario = (Usuario) session.getAttribute("usuario");
+			usuario.addArquivo(new Arquivo(0L,fileUpload));
+			daoUsuario.gravarImagem(usuario);
+			
+			System.out.println("Arquivo:  " + fileUpload);
+			response.getWriter().write("Processada com sucesso");
+		}
 	}
 	
 }

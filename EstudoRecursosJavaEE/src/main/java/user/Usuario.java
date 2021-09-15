@@ -7,18 +7,18 @@ public class Usuario {
 	private Long id;
 	private String login;
 	private String senha;
-	private List<Imagem> imagens = new ArrayList<>();
+	private List<Arquivo> arquivo = new ArrayList<>();
 	
 	public Usuario() {
 		super();
 		
 	}
 
-	public Usuario(Long id, String login, String senha, List<Imagem> imagens) {
+	public Usuario(Long id, String login, String senha, List<Arquivo> arquivo) {
 		this.id = id;
 		this.login = login;
 		this.senha = senha;
-		this.imagens = imagens;
+		this.arquivo = arquivo;
 	}
 	
 	public String getLogin() {
@@ -43,16 +43,16 @@ public class Usuario {
 		this.senha = senha;
 	}
 
-	public List<Imagem> getImagens() {
-		return imagens;
+	public List<Arquivo> getArquivos() {
+		return arquivo;
 	}
 
-	public void setImagens(List<Imagem> imagens) {
-		this.imagens = imagens;
+	public void setArquivos(List<Arquivo> arquivo) {
+		this.arquivo = arquivo;
 	}
 	
-	public void addImagem(Imagem imagem) {
-		this.imagens.add(imagem);
+	public void addArquivo(Arquivo arquivo) {
+		this.arquivo.add(arquivo);
 	}
 	
 }

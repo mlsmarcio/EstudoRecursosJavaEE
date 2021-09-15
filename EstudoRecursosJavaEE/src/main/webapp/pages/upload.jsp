@@ -24,7 +24,7 @@
 					<tr>
 						<td> ${user.id} </td>
 						<td> ${user.login} </td>
-						<td> <a href="servletUploadFile?acao=download&idImagem=${img.id}">Download Imagem</a> </td>
+						<td> <a href="servletUploadFile?acao=download&idImagem=${img.id}">Download ${img.tipo}</a> </td>
 					</tr>
 				</c:forEach>
 			</table>

@@ -8,22 +8,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import connection.SingleConnection;
-import user.Imagem;
+import user.Arquivo;
 import user.Usuario;
 
-public class DaoImagem {
+public class DaoArquivo {
 	private Connection connection;
 	
-	public DaoImagem() {
+	public DaoArquivo() {
 		connection = SingleConnection.getConnection();
 	}
 	
-	public void salvar(Imagem imagem, Long idUsuario){
+	public void salvar(Arquivo arquivo, Long idUsuario){
 		try {
-			String sql = "INSERT INTO tbImagens(imagem, idUsuario) values(?,?)";
+			String sql = "INSERT INTO tbarquivo(file, idUsuario, tipo) values(?,?, ?)";
 			PreparedStatement insert = connection.prepareStatement(sql);
-			insert.setString(1, imagem.getImagem());
+			insert.setString(1, arquivo.getFile());
 			insert.setLong(2, idUsuario);
+			insert.setString(3, arquivo.getTipo());
 			insert.execute();
 			connection.commit();
 			
@@ -37,35 +38,37 @@ public class DaoImagem {
 		}
 	}
 	
-	public List<Imagem> listar(Long idUsuario) throws Exception{
-		List<Imagem> lista = new ArrayList<>();
-		Imagem imagem = null;
-		String sql = "SELECT * FROM tbImagens WHERE idUsuario=? order by id";
+	public List<Arquivo> listar(Long idUsuario) throws Exception{
+		List<Arquivo> lista = new ArrayList<>();
+		Arquivo arquivo = null;
+		String sql = "SELECT * FROM tbarquivo WHERE idUsuario=? order by id";
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setLong(1, idUsuario);
 		ResultSet resultSet = statement.executeQuery();
 		
 		while (resultSet.next()) {
-			imagem = new Imagem();
-			imagem.setId(resultSet.getLong("id"));
-			imagem.setImagem(resultSet.getString("imagem"));
+			arquivo = new Arquivo();
+			arquivo.setId(resultSet.getLong("id"));
+			arquivo.setFile(resultSet.getString("file"));
+			arquivo.setTipo(resultSet.getString("tipo"));
 			
-			lista.add(imagem);
+			lista.add(arquivo);
 		}
 		return lista;
 	}
 
-	public Imagem getImagem (Long idImagem) throws Exception{
-		Imagem imagem = null;
-		String sql = "SELECT * FROM tbImagens WHERE id=?";
+	public Arquivo getImagem (Long idImagem) throws Exception{
+		Arquivo imagem = null;
+		String sql = "SELECT * FROM tbarquivo WHERE id=?";
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setLong(1, idImagem);
 		ResultSet resultSet = statement.executeQuery();
 		
 		if(resultSet.next()) {
-			imagem = new Imagem();
+			imagem = new Arquivo();
 			imagem.setId(resultSet.getLong("id"));
-			imagem.setImagem(resultSet.getString("imagem"));
+			imagem.setFile(resultSet.getString("file"));
+			imagem.setTipo(resultSet.getString("tipo"));
 		}
 		return imagem;
 	}

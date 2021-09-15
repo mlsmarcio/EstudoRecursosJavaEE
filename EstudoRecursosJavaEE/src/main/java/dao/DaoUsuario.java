@@ -4,17 +4,17 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import user.Imagem;
+import user.Arquivo;
 import user.Usuario;
 import connection.SingleConnection;
 
 public class DaoUsuario {
 	private Connection connection;
-	private DaoImagem daoImagem;
+	private DaoArquivo daoImagem;
 	
 	public DaoUsuario() {
 		connection = SingleConnection.getConnection();
-		this.daoImagem = new DaoImagem();
+		this.daoImagem = new DaoArquivo();
 	}
 	
 	public void salvar(Usuario usuario){
@@ -30,7 +30,7 @@ public class DaoUsuario {
 			if (rs != null) {
 				Long idUsuario = rs.getLong(1);
 				
-				for (Imagem imagem : usuario.getImagens()) {
+				for (Arquivo imagem : usuario.getArquivos()) {
 					daoImagem.salvar(imagem, idUsuario);
 				}
 			}
@@ -98,7 +98,7 @@ public class DaoUsuario {
 				user.setId(resultado.getLong("Id"));
 				user.setLogin(resultado.getString("login"));
 				user.setSenha(resultado.getString("senha"));
-				user.setImagens(daoImagem.listar(user.getId()));
+				user.setArquivos(daoImagem.listar(user.getId()));
 			}
 			
 		} catch (SQLException e) {
@@ -173,8 +173,8 @@ public class DaoUsuario {
 	*/
 	
 	public void gravarImagem(Usuario usuario) {
-		for (Imagem imagem : usuario.getImagens()) {
-			daoImagem.salvar(imagem, usuario.getId());
+		for (Arquivo arquivo : usuario.getArquivos()) {
+			daoImagem.salvar(arquivo, usuario.getId());
 		}
 			
 	}

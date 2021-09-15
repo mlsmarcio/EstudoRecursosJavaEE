@@ -46,6 +46,7 @@ public class ServletAutenticacao extends HttpServlet {
 			request.getRequestDispatcher(url).forward(request, response);
 			
 		}else {
+			request.setAttribute("msg", "Login ou senha inválidos!");
 			request.getRequestDispatcher("/autenticar.jsp?url="+url).forward(request, response);
 			
 		}
